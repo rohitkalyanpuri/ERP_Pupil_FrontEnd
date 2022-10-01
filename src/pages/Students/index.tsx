@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MetaTags from "react-meta-tags";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { withRouter, Link } from "react-router-dom";
-import { ParentProps } from "../../types/types";
+import { StudentProps } from "../../types/types";
 import { currentTenant } from "../../constants/tenant";
 import AlertCommon from "src/components/Common/AlertCommon";
 import {
@@ -27,41 +27,43 @@ import SpinnerLoader from "../../components/Common/Spinner";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import {
-  getParentList as onGetParents,
-  createParent,
-  updateParent,
-  removeParent,
-} from "../../slices/Parents/thunk";
+  getStudentList as onGetStudents,
+  createStudent,
+  updateStudent,
+  removeStudent,
+} from "../../slices/Students/thunk";
 import "../../assets/scss/datatables.scss";
-const Parents = () => {
-  const { parents, loading } = useSelector((state: any) => ({
-    parents: state.parent.parents,
-    loading: state.parent.loading,
+const Students = () => {
+  const { students, loading } = useSelector((state: any) => ({
+    students: state.student.students,
+    loading: state.student.loading,
   }));
-  const parentCount = parents !== null ? parents.length : 0;
   const dispatch = useDispatch();
-  const [parent, setParent] = useState<ParentProps>({
-    parentId: 0,
+  const studentCount = students !== null ? students.length : 0;
+  const [student, setStudent] = useState<StudentProps>({
+    studentId: 0,
     tenantId: currentTenant,
+    password: "",
     firstName: "",
     lastName: "",
-    mobile: "",
-    email: "",
     dob: "",
+    mobile: "",
+    parentId: 0,
+    dateOfJoin: "",
     status: true,
   });
 
   const [modal, setModal] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   useEffect(() => {
-    if (parents && !parents.length) {
-      dispatch(onGetParents());
+    if (students && !students.length) {
+      dispatch(onGetStudents());
     }
-  }, [onGetParents, parents]);
+  }, [onGetStudents, students]);
   const handleShow = () => setModal(false);
   const pageOptions = {
     sizePerPage: 10,
-    totalSize: parentCount, // replace later with size(users),
+    totalSize: studentCount, // replace later with size(users),
     custom: true,
   };
   const defaultSorted: any = [
@@ -70,17 +72,17 @@ const Parents = () => {
       order: "desc", // desc or asc
     },
   ];
-  const editParent = (item: ParentProps) => {
+  const editStudent = (item: StudentProps) => {
     setIsEdit(true);
     item = { ...item, dob: item.dob ? formatDate(new Date(item.dob), "") : "" };
-    setParent(item);
+    setStudent(item);
     toggle();
   };
   const { SearchBar } = Search;
-  const parentListColumns = [
+  const StudentListColumns = [
     {
-      text: "Parent Id",
-      dataField: "parentId",
+      text: "Student Id",
+      dataField: "studentId",
       sort: true,
       hidden: true,
     },
@@ -95,16 +97,16 @@ const Parents = () => {
       sort: true,
     },
     {
-      dataField: "email",
       text: "Email",
+      dataField: "email",
       sort: true,
     },
     {
-      dataField: "dob",
       text: "DOB",
+      dataField: "dob",
       sort: true,
-      formatter: (cellContent: any, parent: ParentProps) =>
-        parent.dob ? formatDate(new Date(parent.dob), "mm/dd/yyyy") : "",
+      formatter: (cellContent: any, Student: StudentProps) =>
+        Student.dob ? formatDate(new Date(Student.dob), "mm/dd/yyyy") : "",
     },
     {
       text: "Mobile",
@@ -117,17 +119,17 @@ const Parents = () => {
       editable: false,
       text: "Action",
       // eslint-disable-next-line react/display-name
-      formatter: (cellContent: any, parent: ParentProps) => (
+      formatter: (cellContent: any, Student: StudentProps) => (
         <React.Fragment>
           <Row className="align-items-center">
             <Link to="#" className="text-body d-flex align-items-center">
               <i
                 className="fas fa-edit text-info font-size-13 me-2"
-                onClick={e => editParent(parent)}
+                onClick={e => editStudent(Student)}
               ></i>{" "}
               <i
                 className="fas fa-trash-alt text-danger font-size-13 me-2"
-                onClick={e => dispatch(removeParent(parent.parentId))}
+                onClick={e => dispatch(removeStudent(Student.studentId))}
               ></i>{" "}
             </Link>
           </Row>
@@ -140,28 +142,30 @@ const Parents = () => {
   };
   const handleValidUserSubmit = (values: any) => {
     if (isEdit) {
-      const parentEdit: ParentProps = {
-        parentId: parent.parentId,
+      const StudentEdit: StudentProps = {
+        studentId: student.studentId,
         tenantId: currentTenant,
         firstName: values["fname"],
         lastName: values["lname"],
-        mobile: values["mobile"],
-        email: values["email"],
         dob: values["dob"],
-      };
-      dispatch(updateParent(parentEdit));
-    } else {
-      const newParent: ParentProps = {
+        mobile: values["mobile"],
         parentId: 0,
+        dateOfJoin: "",
+      };
+      dispatch(updateStudent(StudentEdit));
+    } else {
+      const newStudent: StudentProps = {
+        studentId: 0,
         tenantId: currentTenant,
         firstName: values["fname"],
         lastName: values["lname"],
-        mobile: values["mobile"],
-        email: values["email"],
         dob: values["dob"],
+        mobile: values["mobile"],
+        parentId: 0,
+        dateOfJoin: "",
       };
       // save new user
-      dispatch(createParent(newParent));
+      dispatch(createStudent(newStudent));
     }
     toggle();
   };
@@ -177,13 +181,13 @@ const Parents = () => {
       ) : (
         <div className="page-content">
           <MetaTags>
-            <title>Parents | Pupil ERP</title>
+            <title>Students | Pupil ERP</title>
           </MetaTags>
           <Container fluid>
             {/* Render Breadcrumbs */}
             <Breadcrumbs
               title="Application"
-              breadcrumbItem={`Parents List(${parentCount})`}
+              breadcrumbItem={`Students List(${studentCount})`}
             />
             <Row>
               <AlertCommon />
@@ -197,8 +201,8 @@ const Parents = () => {
                       {({ paginationProps, paginationTableProps }) => (
                         <ToolkitProvider
                           keyField="id"
-                          data={parents}
-                          columns={parentListColumns}
+                          data={students}
+                          columns={StudentListColumns}
                           bootstrap4
                           search
                         >
@@ -272,7 +276,9 @@ const Parents = () => {
                                                   validate={{
                                                     required: { value: true },
                                                   }}
-                                                  value={parent.firstName || ""}
+                                                  value={
+                                                    student.firstName || ""
+                                                  }
                                                 />
                                               </div>
                                               <div className="mb-3">
@@ -285,7 +291,7 @@ const Parents = () => {
                                                   validate={{
                                                     required: { value: true },
                                                   }}
-                                                  value={parent.lastName || ""}
+                                                  value={student.lastName || ""}
                                                 />
                                               </div>
                                               <div className="mb-3">
@@ -298,7 +304,9 @@ const Parents = () => {
                                                   validate={{
                                                     required: { value: true },
                                                   }}
-                                                  value={parent.email || ""}
+                                                  value={
+                                                    student.firstName || ""
+                                                  }
                                                 />
                                               </div>
                                               <div className="mb-3">
@@ -311,7 +319,7 @@ const Parents = () => {
                                                   validate={{
                                                     required: { value: true },
                                                   }}
-                                                  value={parent.mobile || ""}
+                                                  value={student.mobile || ""}
                                                 />
                                               </div>
                                               <div className="mb-3">
@@ -326,7 +334,7 @@ const Parents = () => {
                                                       format: "MM/DD/YYYY",
                                                     },
                                                   }}
-                                                  value={parent.dob || ""}
+                                                  value={student.dob || ""}
                                                 />
                                               </div>
                                             </Col>
@@ -379,4 +387,4 @@ const Parents = () => {
   );
 };
 
-export default withRouter(Parents);
+export default withRouter(Students);

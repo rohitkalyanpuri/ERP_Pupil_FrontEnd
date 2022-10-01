@@ -11,6 +11,7 @@ import Register from "../pages/Authentication/Register";
 import ForgetPwd from "../pages/Authentication/ForgetPassword";
 //Application
 import Parents from "../pages/Parents";
+import Students from "../pages/Students";
 interface RouteProps {
   path: string;
   component: any;
@@ -25,6 +26,7 @@ const userRoutes: Array<RouteProps> = [
   // //profile
   { path: "/profile", component: UserProfile },
   { path: "/parents", component: Parents },
+  { path: "/students", component: Students },
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
   { path: "/", exact: true, component: () => <Redirect to="/sales" /> },

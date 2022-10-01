@@ -1,9 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ParentProps } from "../../types/types";
+import { ParentProps, ApiResponseProps } from "../../types/types";
+import { ParentApi } from "../pupilApi";
 import axios from "axios";
-// action
 import {
-  apiError,
   getParents,
   addParent,
   editParent,
@@ -11,6 +10,8 @@ import {
   setUnsetLoader,
 } from "./reducer";
 import { showHideAlert } from "../Alert/reducer";
+
+// action
 const config = {
   headers: {
     "Content-Type": "application/json",
@@ -19,15 +20,23 @@ const config = {
 export const getParentList = () => async (dispatch: any) => {
   dispatch(setUnsetLoader(true));
   try {
-    let response: ParentProps = await axios.get(
-      "api/Parent/Getparentslist",
-      config
-    );
-    dispatch(getParents(response));
+    let response: ApiResponseProps = await axios.get(ParentApi.Get, config);
+    if (response.status == 0) {
+      response.data = Object.keys(response.data[0]).length === 0 ?null  : response.data;
+      dispatch(getParents(response.data));
+    } else {
+      dispatch(
+        showHideAlert({
+          showHide: true,
+          color: "danger",
+          message: response.message,
+        })
+      );
+    }
     dispatch(setUnsetLoader(false));
     return response;
   } catch (error) {
-    dispatch(apiError(error));
+    // dispatch(apiError(error));
     dispatch(setUnsetLoader(false));
   }
 };
@@ -35,19 +44,29 @@ export const getParentList = () => async (dispatch: any) => {
 export const createParent = (parent: ParentProps) => async (dispatch: any) => {
   try {
     const body = JSON.stringify(parent);
-    let response: ParentProps = await axios.post(
-      "/api/Parent/Addparent",
+    let response: ApiResponseProps = await axios.post(
+      ParentApi.Add,
       body,
       config
     );
-    dispatch(addParent(response));
-    dispatch(
-      showHideAlert({
-        showHide: true,
-        color: "success",
-        message: "Parent added successfully!",
-      })
-    );
+    if (response.status == 0) {
+      dispatch(addParent(response.data));
+      dispatch(
+        showHideAlert({
+          showHide: true,
+          color: "success",
+          message: response.message,
+        })
+      );
+    } else {
+      dispatch(
+        showHideAlert({
+          showHide: true,
+          color: "danger",
+          message: response.message,
+        })
+      );
+    }
   } catch (error) {
     return error;
   }
@@ -56,19 +75,29 @@ export const createParent = (parent: ParentProps) => async (dispatch: any) => {
 export const updateParent = (parent: ParentProps) => async (dispatch: any) => {
   try {
     const body = JSON.stringify(parent);
-    let response: ParentProps = await axios.put(
-      "/api/Parent/Editparent",
+    let response: ApiResponseProps = await axios.put(
+      ParentApi.Edit,
       body,
       config
     );
-    dispatch(editParent(response));
-    dispatch(
-      showHideAlert({
-        showHide: true,
-        color: "success",
-        message: "Parent updated successfully!",
-      })
-    );
+    if (response.status == 0) {
+      dispatch(editParent(response.data));
+      dispatch(
+        showHideAlert({
+          showHide: true,
+          color: "success",
+          message: response.message,
+        })
+      );
+    } else {
+      dispatch(
+        showHideAlert({
+          showHide: true,
+          color: "danger",
+          message: response.message,
+        })
+      );
+    }
   } catch (error) {
     return error;
   }
@@ -76,15 +105,29 @@ export const updateParent = (parent: ParentProps) => async (dispatch: any) => {
 
 export const removeParent = (id: number) => async (dispatch: any) => {
   try {
-    let response = await axios.delete(`/api/Parent/Deleteparent/${id}`, config);
-    dispatch(deleteParent(id));
-    dispatch(
-      showHideAlert({
-        showHide: true,
-        color: "success",
-        message: "Parent deleted successfully!",
-      })
+    let response: ApiResponseProps = await axios.delete(
+      ParentApi.Delete + `${id}`,
+      config
     );
+
+    if (response.status == 1) {
+      dispatch(deleteParent(id));
+      dispatch(
+        showHideAlert({
+          showHide: true,
+          color: "success",
+          message: response.message,
+        })
+      );
+    } else {
+      dispatch(
+        showHideAlert({
+          showHide: true,
+          color: "danger",
+          message: response.message,
+        })
+      );
+    }
   } catch (error) {
     dispatch(
       showHideAlert({

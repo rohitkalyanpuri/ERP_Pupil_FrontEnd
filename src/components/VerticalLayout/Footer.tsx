@@ -8,11 +8,19 @@ const Footer = () => {
       <footer className="footer">
         <Container fluid={true}>
           <Row>
-            <Col md={6}>{new Date().getFullYear()} © Dashonic.</Col>
+            <Col md={6}>{new Date().getFullYear()} © Pupil.</Col>
             <Col md={6}>
               <div className="text-sm-end d-none d-sm-block">
-                    Crafted with <i className="mdi mdi-heart text-danger"></i> by <Link to="https://Pichforest.com/" target="_blank" rel="noreferrer" className="text-reset">Pichforest</Link>
-                </div>
+                Crafted with <i className="mdi mdi-heart text-danger"></i> by{" "}
+                <a
+                  href="https://systrans-softtech-solution.business.site"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-reset"
+                >
+                  Systrans Softech Solutions.
+                </a>
+              </div>
             </Col>
           </Row>
         </Container>

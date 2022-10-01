@@ -21,6 +21,9 @@ import profileReducer from "./Auth/Profile/reducer";
 // // Forget Password
 import forgetPasswordReducer from "./Auth/Forgetpwd/reducer";
 
+//students
+import studentReducer from "./Students/reducer";
+
 const rootReducer = combineReducers({
   Layout: layoutReducer,
   register: registerReducer,
@@ -28,8 +31,9 @@ const rootReducer = combineReducers({
   forgetPassword: forgetPasswordReducer,
   profile: profileReducer,
   parent: parentReducer,
-  alert:alertReducer,
-  spinner: spinnerReducer
+  alert: alertReducer,
+  spinner: spinnerReducer,
+  student: studentReducer,
 });
 
 export default rootReducer;

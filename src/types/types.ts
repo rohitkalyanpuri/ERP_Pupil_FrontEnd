@@ -27,3 +27,24 @@ export type AlertProps = {
   color: string;
   message: string;
 };
+
+export type ApiResponseProps = {
+  status: number;
+  success: boolean;
+  message: string | null;
+  error: string | null;
+  data: any | null;
+};
+
+export type StudentProps = {
+  studentId: number;
+  tenantId: string;
+  password?: string;
+  firstName: string;
+  lastName: string;
+  dob?: string;
+  mobile: string;
+  parentId: number;
+  dateOfJoin?: string;
+  status?: boolean;
+};

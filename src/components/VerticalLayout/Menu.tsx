@@ -38,6 +38,12 @@ const menuItems: Array<MenuItemsProps> = [
     },
     {
         id: 5,
+        label: "Students",
+        icon: "user",
+        link: "/students"
+    },
+    {
+        id: 6,
         label: "Calendar",
         icon: "calendar",
         link: "/calendar"

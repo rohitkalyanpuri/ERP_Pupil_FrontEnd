@@ -21,9 +21,6 @@ const parentSlice = createSlice({
   name: "parent",
   initialState,
   reducers: {
-    apiError(state, action) {
-      state.error = action.payload.error;
-    },
     getParents(state, action) {
       state.parents = action.payload;
     },
@@ -50,7 +47,7 @@ const parentSlice = createSlice({
   },
 });
 
-export const { apiError, getParents, addParent, editParent, deleteParent,setUnsetLoader } =
+export const {  getParents, addParent, editParent, deleteParent,setUnsetLoader } =
   parentSlice.actions;
 
 export default parentSlice.reducer;
