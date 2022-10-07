@@ -11,6 +11,7 @@ import Register from "../pages/Authentication/Register";
 import ForgetPwd from "../pages/Authentication/ForgetPassword";
 //Application
 import Parents from "../pages/Parents";
+import ParentImport from "src/pages/Parents/parentImport";
 import Students from "../pages/Students";
 interface RouteProps {
   path: string;
@@ -26,6 +27,7 @@ const userRoutes: Array<RouteProps> = [
   // //profile
   { path: "/profile", component: UserProfile },
   { path: "/parents", component: Parents },
+  { path: "/parent-import", component: ParentImport },
   { path: "/students", component: Students },
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
