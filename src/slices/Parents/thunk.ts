@@ -22,7 +22,8 @@ export const getParentList = () => async (dispatch: any) => {
   try {
     let response: ApiResponseProps = await axios.get(ParentApi.Get, config);
     if (response.status == 0) {
-      response.data = Object.keys(response.data[0]).length === 0 ?null  : response.data;
+      response.data =
+        Object.keys(response.data[0]).length === 0 ? null : response.data;
       dispatch(getParents(response.data));
     } else {
       dispatch(
@@ -138,3 +139,45 @@ export const removeParent = (id: number) => async (dispatch: any) => {
     );
   }
 };
+
+export const importParent =
+  (parents: ParentProps[]) => async (dispatch: any) => {
+    dispatch(setUnsetLoader(true));
+    dispatch(
+      showHideAlert({
+        showHide: true,
+        color: "info",
+        message: "Importing... Please do not refresh/close the page",
+      })
+    );
+    try {
+      const body = JSON.stringify(parents);
+      let response: ApiResponseProps = await axios.post(
+        ParentApi.Import,
+        body,
+        config
+      );
+      if (response.status == 0) {
+        //dispatch(addParent(response.data));
+        dispatch(
+          showHideAlert({
+            showHide: true,
+            color: "success",
+            message: response.message,
+          })
+        );
+      } else {
+        dispatch(
+          showHideAlert({
+            showHide: true,
+            color: "danger",
+            message: response.message,
+          })
+        );
+      }
+      dispatch(setUnsetLoader(false));
+    } catch (error) {
+      dispatch(setUnsetLoader(false));
+      return error;
+    }
+  };

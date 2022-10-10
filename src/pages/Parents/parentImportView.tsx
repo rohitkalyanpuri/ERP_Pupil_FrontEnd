@@ -1,18 +1,24 @@
 import React from "react";
 import { ParentProps } from "../../types/types";
-import { formatDate } from "../../utils/commonHelper";
-import { Col, Row, Modal, ModalHeader, ModalBody } from "reactstrap";
+//import { formatDate } from "../../utils/commonHelper";
+import { Col, Row, Button } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
+import { useSelector, useDispatch } from "react-redux";
+import { importParent } from "../../slices/Parents/thunk";
 interface ParentListProps {
   parents: Array<ParentProps>;
 }
 const ParentImportView = ({ parents }: ParentListProps) => {
-  console.log(parents);
+  const { loading } = useSelector((state: any) => ({
+    loading: state.parent.loading,
+  }));
+  const dispatch = useDispatch();
+  //console.log(parents);
   const parentListColumns = [
     {
       text: "First Name",
@@ -25,21 +31,16 @@ const ParentImportView = ({ parents }: ParentListProps) => {
       sort: true,
     },
     {
-      text: "Age",
-      dataField: "Age",
-      sort: true,
-    },
-    {
-      dataField: "email",
+      dataField: "Email",
       text: "Email",
       sort: true,
     },
     {
-      dataField: "dob",
+      dataField: "DOB",
       text: "DOB",
       sort: true,
-      formatter: (cellContent: any, parent: ParentProps) =>
-        parent.dob ? formatDate(new Date(parent.dob), "mm/dd/yyyy") : "",
+      // formatter: (cellContent: any, parent: ParentProps) =>
+      //   parent.dob ? formatDate(new Date(parent.dob), "mm/dd/yyyy") : "",
     },
     {
       text: "Mobile",
@@ -53,7 +54,9 @@ const ParentImportView = ({ parents }: ParentListProps) => {
     custom: true,
   };
   const { SearchBar } = Search;
-
+  const handleValidUserSubmit = (values: any) => {
+    dispatch(importParent(parents));
+  };
   return (
     <PaginationProvider pagination={paginationFactory(pageOptions)}>
       {({ paginationProps, paginationTableProps }) => (
@@ -62,6 +65,7 @@ const ParentImportView = ({ parents }: ParentListProps) => {
           data={parents}
           columns={parentListColumns}
           bootstrap4
+          search
         >
           {toolkitProps => (
             <React.Fragment>
@@ -74,29 +78,29 @@ const ParentImportView = ({ parents }: ParentListProps) => {
                     </div>
                   </div>
                 </Col>
-
-                {/* <Col md={6}>
+                <Col md={6}>
                   <div className="d-flex flex-wrap align-items-start justify-content-md-end mt-2 mt-md-0 gap-2 mb-3">
                     <div>
-                      <Link
-                        to="#"
-                        className="btn btn-light"
-                        onClick={handleUserClicks}
+                      <Button
+                        type="button"
+                        outline
+                        color="info"
+                        disabled={loading}
+                        onClick={handleValidUserSubmit}
                       >
-                        <i className="uil uil-plus me-1"></i> Add New
-                      </Link>
+                        <i className="uil uil-check me-2"></i> Submit
+                      </Button>
                     </div>
                   </div>
-                </Col> */}
+                </Col>
               </Row>
-
               <Row>
                 <Col xl="12">
                   <div className="table-responsive">
                     <BootstrapTable
                       {...toolkitProps.baseProps}
                       {...paginationTableProps}
-                      // selectRow={selectRow}
+                      //selectRow={selectRow}
                       // defaultSorted={defaultSorted}
                       classes={"table align-middle table-nowrap table-hover"}
                       bordered={false}

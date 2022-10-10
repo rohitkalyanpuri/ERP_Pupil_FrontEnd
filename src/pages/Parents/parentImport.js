@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import MetaTags from "react-meta-tags";
+import { withRouter } from "react-router-dom";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import AlertCommon from "src/components/Common/AlertCommon";
+import SampleImportFile from "../../../src/assets/Files/SampleParentImport.xlsx";
 import {
   Card,
   CardBody,
   Container,
+  CardHeader,
   Col,
   Row
 } from "reactstrap";
@@ -68,12 +72,13 @@ const convertToJson=(csv)=> {
 const handleSubmit = e => {
   e.preventDefault();
   if (excelFile !== null) {
+   
     const workbook = XLSX.read(excelFile, { type: "buffer" });
     const worksheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[worksheetName];
     const data = XLSX.utils.sheet_to_json(worksheet);
     /* Convert array of arrays */
-    const data2 = XLSX.utils.sheet_to_csv(worksheet, { header: 1 });
+    //const data2 = XLSX.utils.sheet_to_csv(worksheet, { header: 1 });
     setExcelData(data);
   } else {
     setExcelData(null);
@@ -91,20 +96,24 @@ return (
               breadcrumbItem={`Parent Import`}
             />
       <Row>
+      <AlertCommon />
       <Col lg="12">
       <Card>
+      <CardHeader className="justify-content-between d-flex align-items-center">
+                  <h4 className="card-title">Upload Excel file</h4>
+                  <a href={SampleImportFile} download="your file name"><p className="m-0 badge badge-soft-primary py-2">Download Sample File.</p></a>
+                </CardHeader>
       <CardBody>
       <div className='form'>
       <form className='form-group' autoComplete="off"
       onSubmit={handleSubmit}>
-        <label><h5>Upload Excel file</h5></label>
-        <br></br>
+        
         <input type='file' className='form-control'
         onChange={handleFile} required></input>                  
         {excelFileError&&<div className='text-danger'
         style={{marginTop:5+'px'}}>{excelFileError}</div>}
         <button type='submit' className='btn btn-success'
-        style={{marginTop:5+'px'}}>Submit</button>
+        style={{marginTop:5+'px'}}>Import</button>
       </form>
     </div>
     <br></br>
@@ -128,4 +137,4 @@ return (
   
 );
 }
-export default ParentImport;
+export default withRouter(ParentImport);

@@ -3,6 +3,7 @@ export const ParentApi = {
   Add: "/api/parent/addparent",
   Edit: "/api/parent/editparent",
   Delete: "/api/parent/deleteparent/",
+  Import: "/api/parent/importparent",
 };
 
 export const StudentApi = {

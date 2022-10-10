@@ -23,7 +23,6 @@ import "./assets/scss/theme.scss";
 
 import fakeBackend from "./helpers/AuthType/fakeBackend";
 import setAuthToken from "./utils/setAuthToken";
-import {Alert} from "reactstrap"
 //api config
 // import config from "./config";
 // Activating fake backend
