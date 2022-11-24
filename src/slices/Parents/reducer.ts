@@ -6,7 +6,7 @@ interface ParentStateType {
   parentProfile: object;
   error?: string | object | null | undefined | unknown;
   history?: any;
-  loading:boolean
+  loading: boolean;
 }
 
 export const initialState: ParentStateType = {
@@ -14,7 +14,7 @@ export const initialState: ParentStateType = {
   parentProfile: {},
   error: "",
   history: "",
-  loading:false
+  loading: false
 };
 
 const parentSlice = createSlice({
@@ -41,13 +41,18 @@ const parentSlice = createSlice({
         parents: state.parents.filter(p => p.parentId !== action.payload),
       };
     },
-    setUnsetLoader(state,action){
-      state.loading=action.payload
-    }
+    setUnsetLoader(state, action) {
+      state.loading = action.payload;
+    },
   },
 });
 
-export const {  getParents, addParent, editParent, deleteParent,setUnsetLoader } =
-  parentSlice.actions;
+export const {
+  getParents,
+  addParent,
+  editParent,
+  deleteParent,
+  setUnsetLoader,
+} = parentSlice.actions;
 
 export default parentSlice.reducer;

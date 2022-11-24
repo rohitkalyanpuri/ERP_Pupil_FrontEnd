@@ -31,7 +31,7 @@ const fileType = [
 const handleFile = (e) => {
   let selectedFile = e.target.files[0];
   if (selectedFile) {
-    console.log(selectedFile.type);
+    //console.log(selectedFile.type);
     if (selectedFile && fileType.includes(selectedFile.type)) {
       let reader = new FileReader();
       reader.readAsArrayBuffer(selectedFile);
@@ -71,6 +71,7 @@ const convertToJson=(csv)=> {
 // submit function
 const handleSubmit = e => {
   e.preventDefault();
+  setExcelData(null);
   if (excelFile !== null) {
    
     const workbook = XLSX.read(excelFile, { type: "buffer" });
@@ -114,6 +115,7 @@ return (
         style={{marginTop:5+'px'}}>{excelFileError}</div>}
         <button type='submit' className='btn btn-success'
         style={{marginTop:5+'px'}}>Import</button>
+        
       </form>
     </div>
     <br></br>

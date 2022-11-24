@@ -5,6 +5,8 @@ export type AuthProps = {
   authId: 0;
   userType: string;
   message: string;
+  userId: number;
+  roleType: string;
 };
 
 export type ParentProps = {

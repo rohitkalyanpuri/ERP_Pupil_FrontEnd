@@ -157,12 +157,20 @@ export const importParent =
         body,
         config
       );
+      dispatch(setUnsetLoader(false));
       if (response.status == 0) {
-        //dispatch(addParent(response.data));
         dispatch(
           showHideAlert({
             showHide: true,
             color: "success",
+            message: response.message,
+          })
+        );
+      } else if (response.status == 3) {
+        dispatch(
+          showHideAlert({
+            showHide: true,
+            color: "info",
             message: response.message,
           })
         );
@@ -175,9 +183,9 @@ export const importParent =
           })
         );
       }
-      dispatch(setUnsetLoader(false));
+      return response.data;
     } catch (error) {
       dispatch(setUnsetLoader(false));
-      return error;
+      return parents;
     }
   };

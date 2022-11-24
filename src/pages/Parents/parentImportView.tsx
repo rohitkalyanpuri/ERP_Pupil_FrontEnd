@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ParentProps } from "../../types/types";
 //import { formatDate } from "../../utils/commonHelper";
 import { Col, Row, Button } from "reactstrap";
@@ -10,6 +10,7 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { importParent } from "../../slices/Parents/thunk";
+import { currentTenant } from "../../constants/tenant";
 interface ParentListProps {
   parents: Array<ParentProps>;
 }
@@ -18,6 +19,7 @@ const ParentImportView = ({ parents }: ParentListProps) => {
     loading: state.parent.loading,
   }));
   const dispatch = useDispatch();
+  const [parentsList, setParentsList] = useState<ParentProps[]>(parents);
   //console.log(parents);
   const parentListColumns = [
     {
@@ -55,14 +57,21 @@ const ParentImportView = ({ parents }: ParentListProps) => {
   };
   const { SearchBar } = Search;
   const handleValidUserSubmit = (values: any) => {
-    dispatch(importParent(parents));
+    let reqData = parentsList.map(obj => {
+      obj.tenantId = currentTenant;
+      return obj;
+    });
+    dispatch(importParent(reqData));
+  };
+  const handleClearSubmit = (values: any) => {
+    window.location.reload();
   };
   return (
     <PaginationProvider pagination={paginationFactory(pageOptions)}>
       {({ paginationProps, paginationTableProps }) => (
         <ToolkitProvider
           keyField="Mobile"
-          data={parents}
+          data={parentsList}
           columns={parentListColumns}
           bootstrap4
           search
@@ -85,6 +94,18 @@ const ParentImportView = ({ parents }: ParentListProps) => {
                         type="button"
                         outline
                         color="info"
+                        disabled={loading}
+                        onClick={handleClearSubmit}
+                      >
+                        <i className="uil uil-exclamation-triangle me-2"></i>{" "}
+                        Clear
+                      </Button>
+                    </div>
+                    <div>
+                      <Button
+                        type="button"
+                        outline
+                        color="success"
                         disabled={loading}
                         onClick={handleValidUserSubmit}
                       >
