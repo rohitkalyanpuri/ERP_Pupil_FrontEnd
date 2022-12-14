@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ParentProps } from "../../types/types";
 //import { formatDate } from "../../utils/commonHelper";
 import { Col, Row, Button } from "reactstrap";
@@ -20,6 +20,9 @@ const ParentImportView = ({ parents }: ParentListProps) => {
   }));
   const dispatch = useDispatch();
   const [parentsList, setParentsList] = useState<ParentProps[]>(parents);
+  useEffect(() => {
+    setParentsList(parents);
+  }, [parents]);
   //console.log(parents);
   const parentListColumns = [
     {

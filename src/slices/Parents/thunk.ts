@@ -185,6 +185,13 @@ export const importParent =
       }
       return response.data;
     } catch (error) {
+      dispatch(
+        showHideAlert({
+          showHide: true,
+          color: "danger",
+          message: "Bad request please check the file data.",
+        })
+      );
       dispatch(setUnsetLoader(false));
       return parents;
     }
