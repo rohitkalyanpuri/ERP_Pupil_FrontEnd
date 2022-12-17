@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import MetaTags from "react-meta-tags";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { withRouter, Link } from "react-router-dom";
-import { StudentProps } from "../../types/types";
+import { GradeProps } from "../../types/types";
 import { currentTenant } from "../../constants/tenant";
 import AlertCommon from "src/components/Common/AlertCommon";
 import {
@@ -22,96 +22,69 @@ import paginationFactory, {
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { formatDate } from "../../utils/commonHelper";
 import SpinnerLoader from "../../components/Common/Spinner";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import {
-  getStudentList as onGetStudents,
-  createStudent,
-  updateStudent,
-  removeStudent,
-} from "../../slices/Students/thunk";
-import "../../assets/scss/datatables.scss";
-const Students = () => {
-  const { students, loading } = useSelector((state: any) => ({
-    students: state.student.students,
-    loading: state.student.loading,
+  getGradeList,
+  createGrade,
+  updateGrade,
+} from "../../slices/Grades/thunk";
+
+const Grades = () => {
+  const { grades, loading } = useSelector((state: any) => ({
+    grades: state.grade.grades,
+    loading: state.grade.loading,
   }));
   const dispatch = useDispatch();
-  const studentCount = students !== null ? students.length : 0;
-  const [student, setStudent] = useState<StudentProps>({
-    studentId: 0,
+  const gradeCount = grades !== null ? grades.length : 0;
+  const [grade, setGrade] = useState<GradeProps>({
+    gradeId: 0,
     tenantId: currentTenant,
-    password: "",
-    firstName: "",
-    lastName: "",
-    dob: "",
-    mobile: "",
-    parentId: 0,
-    dateOfJoin: "",
-    status: true,
+    gname: "",
+    gdesc: "",
   });
-
   const [modal, setModal] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   useEffect(() => {
-    if (students && !students.length) {
-      dispatch(onGetStudents());
+    if (grades && !grades.length) {
+      dispatch(getGradeList());
     }
-  }, [onGetStudents, students]);
+  }, [getGradeList, grades]);
   const handleShow = () => setModal(false);
   const pageOptions = {
     sizePerPage: 10,
-    totalSize: studentCount, // replace later with size(users),
+    totalSize: gradeCount,
     custom: true,
   };
   const defaultSorted: any = [
     {
-      dataField: "id", // if dataField is not match to any column you defined, it will be ignored.
+      dataField: "gradeId", // if dataField is not match to any column you defined, it will be ignored.
       order: "desc", // desc or asc
     },
   ];
-  const editStudent = (item: StudentProps) => {
+  const editGrade = (item: GradeProps) => {
     setIsEdit(true);
-    item = { ...item, dob: item.dob ? formatDate(new Date(item.dob), "") : "" };
-    setStudent(item);
+    setGrade(item);
     toggle();
   };
   const { SearchBar } = Search;
-  const StudentListColumns = [
+  const GradeListColumns = [
     {
-      text: "Student Id",
-      dataField: "studentId",
+      text: "Grade Id",
+      dataField: "gradeId",
       sort: true,
       hidden: true,
     },
     {
-      text: "First Name",
-      dataField: "firstName",
+      text: "Name",
+      dataField: "gname",
       sort: true,
     },
     {
-      text: "Last Name",
-      dataField: "lastName",
-      sort: true,
-    },
-    {
-      text: "Email",
-      dataField: "email",
-      sort: true,
-    },
-    {
-      text: "DOB",
-      dataField: "dob",
-      sort: true,
-      formatter: (cellContent: any, Student: StudentProps) =>
-        Student.dob ? formatDate(new Date(Student.dob), "mm/dd/yyyy") : "",
-    },
-    {
-      text: "Mobile",
-      dataField: "mobile",
-      sort: true,
+      text: "Description",
+      dataField: "gdesc",
+      sort: false,
     },
     {
       dataField: "menu",
@@ -119,18 +92,18 @@ const Students = () => {
       editable: false,
       text: "Action",
       // eslint-disable-next-line react/display-name
-      formatter: (cellContent: any, Student: StudentProps) => (
+      formatter: (cellContent: any, item: GradeProps) => (
         <React.Fragment>
           <Row className="align-items-center">
             <Link to="#" className="text-body d-flex align-items-center">
               <i
                 className="fas fa-edit text-info font-size-13 me-2"
-                onClick={e => editStudent(Student)}
+                onClick={e => editGrade(item)}
               ></i>{" "}
-              <i
+              {/* <i
                 className="fas fa-trash-alt text-danger font-size-13 me-2"
-                onClick={e => dispatch(removeStudent(Student.studentId))}
-              ></i>{" "}
+                onClick={e => dispatch(removeStudent(item.gradeId))}
+              ></i>{" "} */}
             </Link>
           </Row>
         </React.Fragment>
@@ -140,50 +113,36 @@ const Students = () => {
   const toggle = () => {
     setModal(!modal);
   };
-  const handleValidUserSubmit = (values: any) => {
+  const handleValidSubmit = (values: any) => {
     if (isEdit) {
-      const StudentEdit: StudentProps = {
-        studentId: student.studentId,
+      const GradeEdit: GradeProps = {
+        gradeId: grade.gradeId,
         tenantId: currentTenant,
-        firstName: values["fname"],
-        lastName: values["lname"],
-        dob: values["dob"],
-        mobile: values["mobile"],
-        parentId: 0,
-        dateOfJoin: "",
+        gname: values["gname"],
+        gdesc: values["gdesc"],
       };
-      dispatch(updateStudent(StudentEdit));
+      dispatch(updateGrade(GradeEdit));
     } else {
-      const newStudent: StudentProps = {
-        studentId: 0,
+      const newGrade: GradeProps = {
+        gradeId: 0,
         tenantId: currentTenant,
-        firstName: values["fname"],
-        lastName: values["lname"],
-        dob: values["dob"],
-        mobile: values["mobile"],
-        parentId: 0,
-        dateOfJoin: "",
+        gname: values["gname"],
+        gdesc: values["gdesc"],
       };
       // save new user
-      dispatch(createStudent(newStudent));
+      dispatch(createGrade(newGrade));
     }
     toggle();
   };
-  const handleUserClicks = () => {
+  const handleAddClicks = () => {
     //setUserList("");
-    setIsEdit(false);
-    setStudent({
-      studentId: 0,
+    setGrade({
+      gradeId: 0,
       tenantId: currentTenant,
-      password: "",
-      firstName: "",
-      lastName: "",
-      dob: "",
-      mobile: "",
-      parentId: 0,
-      dateOfJoin: "",
-      status: true,
+      gname: "",
+      gdesc: "",
     });
+    setIsEdit(false);
     toggle();
   };
   return (
@@ -193,14 +152,11 @@ const Students = () => {
       ) : (
         <div className="page-content">
           <MetaTags>
-            <title>Students | Pupil ERP</title>
+            <title>Grades | Pupil ERP</title>
           </MetaTags>
           <Container fluid>
             {/* Render Breadcrumbs */}
-            <Breadcrumbs
-              title="Application"
-              breadcrumbItem={`Students List(${studentCount})`}
-            />
+            <Breadcrumbs title="Application" breadcrumbItem="Grades" />
             <Row>
               <AlertCommon />
 
@@ -213,8 +169,8 @@ const Students = () => {
                       {({ paginationProps, paginationTableProps }) => (
                         <ToolkitProvider
                           keyField="id"
-                          data={students}
-                          columns={StudentListColumns}
+                          data={grades}
+                          columns={GradeListColumns}
                           bootstrap4
                           search
                         >
@@ -238,7 +194,7 @@ const Students = () => {
                                       <Link
                                         to="#"
                                         className="btn btn-light"
-                                        onClick={handleUserClicks}
+                                        onClick={handleAddClicks}
                                       >
                                         <i className="uil uil-plus me-1"></i>{" "}
                                         Add New
@@ -265,7 +221,7 @@ const Students = () => {
 
                                     <Modal isOpen={modal} toggle={toggle}>
                                       <ModalHeader toggle={toggle} tag="h4">
-                                        {!!isEdit ? "Edit User" : "Add User"}
+                                        {!!isEdit ? "Edit Grade" : "Add Grade"}
                                       </ModalHeader>
                                       <ModalBody>
                                         <AvForm
@@ -273,80 +229,35 @@ const Students = () => {
                                             e: any,
                                             values: any
                                           ) => {
-                                            handleValidUserSubmit(values);
+                                            handleValidSubmit(values);
                                           }}
                                         >
                                           <Row form>
                                             <Col xs={12}>
                                               <div className="mb-3">
                                                 <AvField
-                                                  name="fname"
-                                                  label="First Name"
+                                                  name="gname"
+                                                  label="Grade Name"
                                                   type="text"
-                                                  placeholder="Enter First Name"
-                                                  errorMessage="Invalid first name."
+                                                  placeholder="Enter Grade Name"
+                                                  errorMessage="Invalid Grade name."
                                                   validate={{
                                                     required: { value: true },
                                                   }}
-                                                  value={
-                                                    student.firstName || ""
-                                                  }
+                                                  value={grade.gname || ""}
                                                 />
                                               </div>
                                               <div className="mb-3">
                                                 <AvField
-                                                  name="lname"
-                                                  label="Last Name"
-                                                  placeholder="Enter last name"
+                                                  name="gdesc"
+                                                  label="Grade Description"
+                                                  placeholder="Enter Description."
                                                   type="text"
-                                                  errorMessage="Invalid last name."
+                                                  // errorMessage="Invalid Description."
                                                   validate={{
-                                                    required: { value: true },
+                                                    required: { value: false },
                                                   }}
-                                                  value={student.lastName || ""}
-                                                />
-                                              </div>
-                                              <div className="mb-3">
-                                                <AvField
-                                                  name="email"
-                                                  label="Email"
-                                                  type="email"
-                                                  placeholder="Enter Email"
-                                                  errorMessage="Invalid Email"
-                                                  validate={{
-                                                    required: { value: true },
-                                                  }}
-                                                  value={
-                                                    student.firstName || ""
-                                                  }
-                                                />
-                                              </div>
-                                              <div className="mb-3">
-                                                <AvField
-                                                  name="mobile"
-                                                  label="Mobile"
-                                                  type="tel"
-                                                  placeholder="Enter mobile number"
-                                                  errorMessage="Invalid mobile number"
-                                                  validate={{
-                                                    required: { value: true },
-                                                  }}
-                                                  value={student.mobile || ""}
-                                                />
-                                              </div>
-                                              <div className="mb-3">
-                                                <AvField
-                                                  name="dob"
-                                                  label="DOB"
-                                                  placeholder="Enter DOB"
-                                                  errorMessage="Invalid DOB"
-                                                  type="date"
-                                                  validate={{
-                                                    date: {
-                                                      format: "MM/DD/YYYY",
-                                                    },
-                                                  }}
-                                                  value={student.dob || ""}
+                                                  value={grade.gdesc || ""}
                                                 />
                                               </div>
                                             </Col>
@@ -399,4 +310,4 @@ const Students = () => {
   );
 };
 
-export default withRouter(Students);
+export default withRouter(Grades);

@@ -13,6 +13,7 @@ import ForgetPwd from "../pages/Authentication/ForgetPassword";
 import Parents from "../pages/Parents";
 import ParentImport from "src/pages/Parents/parentImport";
 import Students from "../pages/Students";
+import Grade from "../pages/Grades";
 interface RouteProps {
   path: string;
   component: any;
@@ -29,6 +30,7 @@ const userRoutes: Array<RouteProps> = [
   { path: "/parents", component: Parents },
   { path: "/parent-import", component: ParentImport },
   { path: "/students", component: Students },
+  { path: "/grades", component: Grade },
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
   { path: "/", exact: true, component: () => <Redirect to="/sales" /> },

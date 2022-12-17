@@ -168,6 +168,16 @@ const Parents = () => {
   const handleUserClicks = () => {
     //setUserList("");
     setIsEdit(false);
+    setParent({
+      parentId: 0,
+      tenantId: currentTenant,
+      firstName: "",
+      lastName: "",
+      mobile: "",
+      email: "",
+      dob: "",
+      status: true,
+    });
     toggle();
   };
   return (

@@ -24,6 +24,9 @@ import forgetPasswordReducer from "./Auth/Forgetpwd/reducer";
 //students
 import studentReducer from "./Students/reducer";
 
+//grades
+import gradeReducer from "./Grades/reducer";
+
 const rootReducer = combineReducers({
   Layout: layoutReducer,
   register: registerReducer,
@@ -34,6 +37,7 @@ const rootReducer = combineReducers({
   alert: alertReducer,
   spinner: spinnerReducer,
   student: studentReducer,
+  grade: gradeReducer,
 });
 
 export default rootReducer;

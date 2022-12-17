@@ -50,3 +50,10 @@ export type StudentProps = {
   dateOfJoin?: string;
   status?: boolean;
 };
+
+export type GradeProps = {
+  gradeId: number;
+  gname:string;
+  gdesc:string
+  tenantId: string;
+};

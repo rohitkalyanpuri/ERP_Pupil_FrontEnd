@@ -12,3 +12,10 @@ export const StudentApi = {
   Edit: "/api/student/editstudent",
   Delete: "/api/student/deletestudent/",
 };
+
+export const GradeApi = {
+  Get: "api/grade/getgradelist",
+  Add: "/api/grade/addgrade",
+  Edit: "/api/grade/editgrade",
+  Delete: "/api/grade/deletegrade/",
+};
