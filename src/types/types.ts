@@ -53,7 +53,14 @@ export type StudentProps = {
 
 export type GradeProps = {
   gradeId: number;
-  gname:string;
-  gdesc:string
+  gname: string;
+  gdesc: string;
+  tenantId: string;
+};
+
+export type DivisionProps = {
+  divisionId: number;
+  divisionName: string;
+  divisionDesc: string;
   tenantId: string;
 };

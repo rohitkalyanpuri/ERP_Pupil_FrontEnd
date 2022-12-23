@@ -27,6 +27,9 @@ import studentReducer from "./Students/reducer";
 //grades
 import gradeReducer from "./Grades/reducer";
 
+//divisions
+import divisionReducer from "./Divisions/reducer";
+
 const rootReducer = combineReducers({
   Layout: layoutReducer,
   register: registerReducer,
@@ -38,6 +41,7 @@ const rootReducer = combineReducers({
   spinner: spinnerReducer,
   student: studentReducer,
   grade: gradeReducer,
+  division: divisionReducer,
 });
 
 export default rootReducer;

@@ -19,3 +19,10 @@ export const GradeApi = {
   Edit: "/api/grade/editgrade",
   Delete: "/api/grade/deletegrade/",
 };
+
+export const DivisionApi = {
+  Get: "api/division/getdivisionlist",
+  Add: "/api/division/adddivision",
+  Edit: "/api/division/editdivision",
+  Delete: "/api/division/deletedivision/",
+};

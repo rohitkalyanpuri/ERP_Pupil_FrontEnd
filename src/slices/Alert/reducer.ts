@@ -4,7 +4,7 @@ import { AlertProps } from "../../types/types";
 export const initialState: AlertProps = {
   showHide: false,
   color: "",
-  message: ""
+  message: "",
 };
 
 const alertSlice = createSlice({

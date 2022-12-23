@@ -14,6 +14,7 @@ import Parents from "../pages/Parents";
 import ParentImport from "src/pages/Parents/parentImport";
 import Students from "../pages/Students";
 import Grade from "../pages/Grades";
+import Division from "../pages/Divisions";
 interface RouteProps {
   path: string;
   component: any;
@@ -31,6 +32,7 @@ const userRoutes: Array<RouteProps> = [
   { path: "/parent-import", component: ParentImport },
   { path: "/students", component: Students },
   { path: "/grades", component: Grade },
+  { path: "/divisions", component: Division },
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
   { path: "/", exact: true, component: () => <Redirect to="/sales" /> },
