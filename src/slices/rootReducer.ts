@@ -30,6 +30,9 @@ import gradeReducer from "./Grades/reducer";
 //divisions
 import divisionReducer from "./Divisions/reducer";
 
+//academics
+import academicReducer from "./Academic/reducer";
+
 const rootReducer = combineReducers({
   Layout: layoutReducer,
   register: registerReducer,
@@ -42,6 +45,7 @@ const rootReducer = combineReducers({
   student: studentReducer,
   grade: gradeReducer,
   division: divisionReducer,
+  academic: academicReducer,
 });
 
 export default rootReducer;

@@ -64,3 +64,13 @@ export type DivisionProps = {
   divisionDesc: string;
   tenantId: string;
 };
+
+export type AcademicProps = {
+  academicId: number;
+  description: string;
+  yearStartDate?: string;
+  yearEndDate?: string;
+  vacationStartDate?: string;
+  vacationEndDate?: string;
+  tenantId: string;
+};

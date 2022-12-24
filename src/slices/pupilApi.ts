@@ -26,3 +26,10 @@ export const DivisionApi = {
   Edit: "/api/division/editdivision",
   Delete: "/api/division/deletedivision/",
 };
+
+export const AcademicApi = {
+  Get: "api/academic/getacademiclist",
+  Add: "/api/academic/addacademic",
+  Edit: "/api/academic/editacademic",
+  Delete: "/api/academic/deleteacademic/",
+};
