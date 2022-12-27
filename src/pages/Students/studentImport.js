@@ -4,7 +4,8 @@ import MetaTags from "react-meta-tags";
 import { withRouter } from "react-router-dom";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import AlertCommon from "src/components/Common/AlertCommon";
-import SampleImportFile from "../../../src/assets/Files/SampleParentImport.xlsx";
+import {GetSampleApiUrl
+} from "../../slices/Students/thunk";
 import {
   Card,
   CardBody,
@@ -13,12 +14,14 @@ import {
   Col,
   Row
 } from "reactstrap";
+//redux
+import {  useDispatch } from "react-redux";
 import StudentImportView from "./studentImportView";
 const StudentImport = ()=>{
 // on change states
 const [excelFile, setExcelFile] = useState(null);
 const [excelFileError, setExcelFileError] = useState(null);
-
+const dispatch = useDispatch();
 // submit
 const [excelData, setExcelData] = useState(null);
 // it will contain array of objects
@@ -94,7 +97,7 @@ return (
     <Container fluid>
     <Breadcrumbs
               title="Application"
-              breadcrumbItem={`Parent Import`}
+              breadcrumbItem={`Student Import`}
             />
       <Row>
       <AlertCommon />
@@ -102,7 +105,7 @@ return (
       <Card>
       <CardHeader className="justify-content-between d-flex align-items-center">
                   <h4 className="card-title">Upload Excel file</h4>
-                  <a href={SampleImportFile} download="your file name"><p className="m-0 badge badge-soft-primary py-2">Download Sample File.</p></a>
+                  <a  onClick={()=>dispatch(GetSampleApiUrl())}><p className="m-0 badge badge-soft-primary py-2">Download Sample File.</p></a>
                 </CardHeader>
       <CardBody>
       <div className='form'>

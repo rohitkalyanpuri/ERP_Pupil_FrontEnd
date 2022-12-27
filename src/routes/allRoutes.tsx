@@ -33,6 +33,7 @@ const userRoutes: Array<RouteProps> = [
   { path: "/parents", component: Parents },
   { path: "/parent-import", component: ParentImport },
   { path: "/students", component: Students },
+  { path: "/student-import", component: StudentImport },
   { path: "/grades", component: Grade },
   { path: "/divisions", component: Division },
   { path: "/academics", component: Academic },

@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { StudentProps, ApiResponseProps } from "../../types/types";
-import { StudentApi } from "../pupilApi";
+import { StudentApi, ExportExcelApi } from "../pupilApi";
 import axios from "axios";
+import * as fileSaver from "file-saver";
 import {
   getStudents,
   addStudent,
@@ -22,7 +23,8 @@ export const getStudentList = () => async (dispatch: any) => {
   try {
     let response: ApiResponseProps = await axios.get(StudentApi.Get, config);
     if (response.status == 0) {
-      response.data = Object.keys(response.data[0]).length === 0 ?null  : response.data;
+      response.data =
+        Object.keys(response.data[0]).length === 0 ? null : response.data;
       dispatch(getStudents(response.data));
     } else {
       dispatch(
@@ -136,6 +138,39 @@ export const removeStudent = (id: number) => async (dispatch: any) => {
         showHide: true,
         color: "danger",
         message: "System Error!",
+      })
+    );
+  }
+};
+
+export const GetSampleApiUrl = () => async (dispatch: any) => {
+  try {
+    let response: ApiResponseProps = await axios.get(
+      ExportExcelApi.Student,
+      config
+    );
+    if (response.status == 0) {
+      const link = document.createElement("a");
+      link.href = response.message !== null ? response.message : "";
+      link.setAttribute("download", "file.xlsx"); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    } else {
+      dispatch(
+        showHideAlert({
+          showHide: true,
+          color: "danger",
+          message: response.message,
+        })
+      );
+    }
+  } catch (error) {
+    // dispatch(apiError(error));
+    dispatch(
+      showHideAlert({
+        showHide: true,
+        color: "danger",
+        message: "Error.",
       })
     );
   }

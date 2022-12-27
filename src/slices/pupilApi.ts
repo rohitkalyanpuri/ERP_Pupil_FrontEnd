@@ -1,3 +1,4 @@
+import axios from "axios";
 export const ParentApi = {
   Get: "api/parent/getparentslist",
   Add: "/api/parent/addparent",
@@ -32,4 +33,8 @@ export const AcademicApi = {
   Add: "/api/academic/addacademic",
   Edit: "/api/academic/editacademic",
   Delete: "/api/academic/deleteacademic/",
+};
+
+export const ExportExcelApi = {
+  Student: "api/exportexcel/student",
 };

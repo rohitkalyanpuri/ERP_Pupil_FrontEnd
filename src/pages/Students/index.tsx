@@ -265,7 +265,9 @@ const Students = () => {
 
                                     <Modal isOpen={modal} toggle={toggle}>
                                       <ModalHeader toggle={toggle} tag="h4">
-                                        {!!isEdit ? "Edit User" : "Add User"}
+                                        {!!isEdit
+                                          ? "Edit Student"
+                                          : "Add Student"}
                                       </ModalHeader>
                                       <ModalBody>
                                         <AvForm
