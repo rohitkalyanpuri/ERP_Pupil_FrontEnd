@@ -144,6 +144,7 @@ export const removeStudent = (id: number) => async (dispatch: any) => {
 };
 
 export const GetSampleApiUrl = () => async (dispatch: any) => {
+  dispatch(setUnsetLoader(true));
   try {
     let response: ApiResponseProps = await axios.get(
       ExportExcelApi.Student,
@@ -164,8 +165,9 @@ export const GetSampleApiUrl = () => async (dispatch: any) => {
         })
       );
     }
+    dispatch(setUnsetLoader(false));
   } catch (error) {
-    // dispatch(apiError(error));
+    dispatch(setUnsetLoader(false));
     dispatch(
       showHideAlert({
         showHide: true,
@@ -174,4 +176,8 @@ export const GetSampleApiUrl = () => async (dispatch: any) => {
       })
     );
   }
+};
+
+export const SetUnsetLoader = (value: boolean) => async (dispatch: any) => {
+  dispatch(setUnsetLoader(value));
 };

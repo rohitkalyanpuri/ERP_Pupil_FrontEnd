@@ -4,6 +4,7 @@ import MetaTags from "react-meta-tags";
 import { withRouter } from "react-router-dom";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import AlertCommon from "src/components/Common/AlertCommon";
+import SpinnerLoader from "../../components/Common/Spinner";
 import {GetSampleApiUrl
 } from "../../slices/Students/thunk";
 import {
@@ -15,9 +16,13 @@ import {
   Row
 } from "reactstrap";
 //redux
-import {  useDispatch } from "react-redux";
+import {   useSelector,useDispatch } from "react-redux";
+import { SetUnsetLoader } from "../../slices/Students/thunk";
 import StudentImportView from "./studentImportView";
 const StudentImport = ()=>{
+const { loading } = useSelector((state) => ({
+    loading: state.student.loading
+}));
 // on change states
 const [excelFile, setExcelFile] = useState(null);
 const [excelFileError, setExcelFileError] = useState(null);
@@ -81,63 +86,79 @@ const handleSubmit = e => {
     const worksheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[worksheetName];
     const data = XLSX.utils.sheet_to_json(worksheet);
+    var _studentExcelData = [];
+    console.log(data);
+    data.map((v,i)=>{
+      if(v.Parent_ParentID !== "---"){
+        _studentExcelData.push({
+           "firstName":v.FirstName
+        })
+      }
+    });
+    console.log(_studentExcelData);
     /* Convert array of arrays */
     //const data2 = XLSX.utils.sheet_to_csv(worksheet, { header: 1 });
-    setExcelData(data);
+    //setExcelData(data);
   } else {
     setExcelData(null);
   }
 };
 return (
   <React.Fragment>
-    <div className="page-content">
-    <MetaTags>
-            <title>Students | Pupil ERP</title>
-    </MetaTags>
-    <Container fluid>
-    <Breadcrumbs
-              title="Application"
-              breadcrumbItem={`Student Import`}
-            />
-      <Row>
-      <AlertCommon />
-      <Col lg="12">
-      <Card>
-      <CardHeader className="justify-content-between d-flex align-items-center">
-                  <h4 className="card-title">Upload Excel file</h4>
-                  <a  onClick={()=>dispatch(GetSampleApiUrl())}><p className="m-0 badge badge-soft-primary py-2">Download Sample File.</p></a>
-                </CardHeader>
-      <CardBody>
-      <div className='form'>
-      <form className='form-group' autoComplete="off"
-      onSubmit={handleSubmit}>
-        
-        <input type='file' className='form-control'
-        onChange={handleFile} required></input>                  
-        {excelFileError&&<div className='text-danger'
-        style={{marginTop:5+'px'}}>{excelFileError}</div>}
-        <button type='submit' className='btn btn-success'
-        style={{marginTop:5+'px'}}>Import</button>
-        
-      </form>
-    </div>
-    <br></br>
-    <hr></hr>
+    {
+      loading?(<SpinnerLoader />):(
+        <div className="page-content">
+        <MetaTags>
+                <title>Students | Pupil ERP</title>
+        </MetaTags>
+        <Container fluid>
+        <Breadcrumbs
+                  title="Application"
+                  breadcrumbItem={`Student Import`}
+                />
+          <Row>
+          <AlertCommon />
+          <Col lg="12">
+          <Card>
+          <CardHeader className="justify-content-between d-flex align-items-center">
+                      <h4 className="card-title">Upload Excel file</h4>
+                      <a  onClick={()=>dispatch(GetSampleApiUrl())}><p className="m-0 badge badge-soft-primary py-2">Download Sample File.</p></a>
+                    </CardHeader>
+          <CardBody>
+          <div className='form'>
+          <form className='form-group' autoComplete="off"
+          onSubmit={handleSubmit}>
+            
+            <input type='file' className='form-control'
+            onChange={handleFile} required></input>                  
+            {excelFileError&&<div className='text-danger'
+            style={{marginTop:5+'px'}}>{excelFileError}</div>}
+            <button type='submit' className='btn btn-success'
+            style={{marginTop:5+'px'}}>Import</button>
+            
+          </form>
+        </div>
+        <br></br>
+        <hr></hr>
+    
+        {/* view file section */}
+        <h5>View Excel file</h5>
+        <div className='viewer'>
+          {excelData===null&&<>No file selected</>}
+          {excelData!==null&&(
+            <StudentImportView students={excelData} />
+          )}       
+        </div>
+          </CardBody>
+            </Card>
+          </Col>
+          </Row>
+        </Container>
+        </div>
 
-    {/* view file section */}
-    <h5>View Excel file</h5>
-    <div className='viewer'>
-      {excelData===null&&<>No file selected</>}
-      {excelData!==null&&(
-        <StudentImportView students={excelData} />
-      )}       
-    </div>
-      </CardBody>
-        </Card>
-      </Col>
-      </Row>
-    </Container>
-    </div>
+      )
+    }
+   
   </React.Fragment>
   
 );
